@@ -1,0 +1,10 @@
+package de.teamg.antique.data.repository;
+
+import de.teamg.antique.data.entity.Rental;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface RentalRepository extends JpaRepository<Rental, Long> {
+
+}

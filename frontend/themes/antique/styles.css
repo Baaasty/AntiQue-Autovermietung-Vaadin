@@ -1,0 +1,64 @@
+@import url('./main-layout.css');
+
+html {
+    --lumo-base-color: rgb(254, 253, 223);
+    --lumo-primary-color: rgb(224, 114, 51);
+    --lumo-primary-color-50pct: rgba(224, 114, 51, 0.5);
+    --lumo-primary-color-10pct: rgba(224, 114, 51, 0.1);
+    --lumo-primary-text-color: rgb(224, 114, 51);
+    --lumo-shade: rgb(12, 68, 93);
+    --lumo-shade-5pct: rgba(12, 68, 93, 0.05);
+    --lumo-shade-10pct: rgba(12, 68, 93, 0.1);
+    --lumo-shade-20pct: rgba(12, 68, 93, 0.2);
+    --lumo-shade-30pct: rgba(12, 68, 93, 0.3);
+    --lumo-shade-40pct: rgba(12, 68, 93, 0.4);
+    --lumo-shade-50pct: rgba(12, 68, 93, 0.5);
+    --lumo-shade-60pct: rgba(12, 68, 93, 0.6);
+    --lumo-shade-70pct: rgba(12, 68, 93, 0.7);
+    --lumo-shade-80pct: rgba(12, 68, 93, 0.8);
+    --lumo-shade-90pct: rgba(12, 68, 93, 0.9);
+    --lumo-body-text-color: rgb(12, 68, 93);
+    --lumo-error-color-50pct: rgba(231, 24, 24, 0.5);
+    --lumo-error-color-10pct: rgba(231, 24, 24, 0.1);
+    --lumo-success-color-50pct: rgba(62, 229, 170, 0.5);
+    --lumo-success-color-10pct: rgba(62, 229, 170, 0.1);
+    --lumo-error-color: hsl(0, 81%, 50%);
+    --lumo-error-text-color: hsl(0, 86%, 45%);
+    --lumo-success-color: hsl(159, 76%, 57%);
+    --lumo-success-contrast-color: hsl(159, 29%, 10%);
+    --lumo-success-text-color: hsl(159, 61%, 40%);
+
+}
+
+[theme~="dark"] {
+    --lumo-base-color: rgba(12, 68, 93, 0.5);
+    --lumo-primary-color: rgb(224, 114, 51);
+    --lumo-primary-color-50pct: rgba(224, 114, 51, 0.5);
+    --lumo-primary-color-10pct: rgba(224, 114, 51, 0.1);
+    --lumo-shade: rgb(0, 0, 0);
+    --lumo-shade-5pct: rgba(0, 0, 0, 0.05);
+    --lumo-shade-10pct: rgba(0, 0, 0, 0.1);
+    --lumo-shade-20pct: rgba(0, 0, 0, 0.2);
+    --lumo-shade-30pct: rgba(0, 0, 0, 0.3);
+    --lumo-shade-40pct: rgba(0, 0, 0, 0.4);
+    --lumo-shade-50pct: rgba(0, 0, 0, 0.5);
+    --lumo-shade-60pct: rgba(0, 0, 0, 0.6);
+    --lumo-shade-70pct: rgba(0, 0, 0, 0.7);
+    --lumo-shade-80pct: rgba(0, 0, 0, 0.8);
+    --lumo-shade-90pct: rgba(0, 0, 0, 0.9);
+    --lumo-primary-text-color: rgb(224, 114, 51);
+    --lumo-body-text-color: rgb(254, 253, 223);
+
+}
+
+@media all and (max-width: 1100px) {
+    .list-view.editing .toolbar,
+    .list-view.editing .contact-grid {
+        display: none;
+    }
+}
+
+a[highlight] {
+    font-weight: bold;
+    text-decoration: underline;
+}
