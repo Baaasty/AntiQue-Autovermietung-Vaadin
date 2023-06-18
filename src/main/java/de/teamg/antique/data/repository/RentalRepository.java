@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface RentalRepository extends JpaRepository<Rental, Long> {
 
-    @Query(value = "SELECT r FROM Rental r WHERE (r.rentalStart, r.rentalEnd, r.kmStart, r.kmEnd, r.pricePerDay, r.pricePerKm) LIKE lower(concat('%', :filter, '%'))")
+    @Query(value = "SELECT r FROM Rental r WHERE concat(r.rentalStart, r.rentalEnd, r.kmStart, r.kmEnd, r.pricePerDay, r.pricePerKm) LIKE lower(concat('%', :filter, '%'))")
     List<Rental> findAllFilterAllColumns(String filter);
 
 }
