@@ -10,7 +10,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @CacheConfig(cacheNames = {"cars"})
@@ -35,11 +34,6 @@ public class CarService {
         return carRepository.findById(id).orElseThrow(() -> new CarNotFoundException(id));
     }
 
-    @Cacheable(key = "#id", unless = "#result.isPresent()")
-    public Optional<Car> getOptionalCarById(long id) {
-        return carRepository.findById(id);
-    }
-
     @CachePut(key = "#car.id")
     public Car createCar(Car car) {
         return carRepository.save(car);
@@ -59,6 +53,10 @@ public class CarService {
             throw new CarNotFoundException(id);
 
         carRepository.deleteById(id);
+    }
+
+    public boolean carExistsById(long id) {
+        return carRepository.findById(id).isPresent();
     }
 
 }

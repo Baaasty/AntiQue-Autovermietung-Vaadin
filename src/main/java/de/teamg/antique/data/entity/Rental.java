@@ -4,11 +4,15 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Rental {
@@ -18,10 +22,10 @@ public class Rental {
     private long id;
 
     @Column(nullable = false)
-    private Timestamp rentalStart;
+    private LocalDateTime rentalStart;
 
     @Column
-    private Timestamp rentalEnd;
+    private LocalDateTime rentalEnd;
 
     @Column(nullable = false)
     private int kmStart;
@@ -34,6 +38,14 @@ public class Rental {
 
     @Column(nullable = false)
     private double pricePerKm;
+
+    @Column(nullable = false)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @Column(nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id", referencedColumnName = "id", nullable = false)
@@ -48,8 +60,8 @@ public class Rental {
     private Person employeePerson;
 
     public Rental(
-            Timestamp rentalStart,
-            Timestamp rentalEnd,
+            LocalDateTime rentalStart,
+            LocalDateTime rentalEnd,
             int kmStart,
             int kmEnd,
             double pricePerDay,

@@ -25,6 +25,26 @@ public class PersonService {
         return personRepository.findAll();
     }
 
+    public List<Person> getAllCustomers() {
+        return personRepository.findCustomers();
+    }
+
+    public List<Person> getAllEmployees() {
+        return personRepository.findEmployees();
+    }
+
+    public List<Person> getAllPersonsFiltered(String filter) {
+        return personRepository.findAllFilterAllColumns(filter);
+    }
+
+    public List<Person> getAllCustomersFiltered(String filter) {
+        return personRepository.findCustomersFilterAllColumns(filter);
+    }
+
+    public List<Person> getAllEmployeesFiltered(String filter) {
+        return personRepository.findEmployeesFilterAllColumns(filter);
+    }
+
     @Cacheable(key = "#id")
     public Person getPersonById(long id) {
         return personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
@@ -49,6 +69,18 @@ public class PersonService {
             throw new PersonNotFoundException(id);
 
         personRepository.deleteById(id);
+    }
+
+    public boolean personExistsById(long id) {
+        return personRepository.existsById(id);
+    }
+
+    public boolean customerExistsById(long id) {
+        return personRepository.customerExistsById(id);
+    }
+
+    public boolean employeeExistsById(long id) {
+        return personRepository.employeeExistsById(id);
     }
 
 }

@@ -3,13 +3,18 @@ package de.teamg.antique.data.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 public class Person {
 
     @Id
@@ -31,17 +36,25 @@ public class Person {
     @Column(nullable = false)
     private String postCode;
 
-    @Column(nullable = false, length = 3)
-    private short countryId;
+    @Column(nullable = false)
+    private String country;
 
     @Column(nullable = false)
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Column(nullable = false)
     private String phone;
 
     @Column(nullable = false)
     private boolean employee;
+
+    @Column(nullable = false)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @Column(nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "customerPerson", cascade = CascadeType.ALL)
     @JsonIgnore

@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,7 +21,7 @@ public class Car {
     @GeneratedValue
     private long id;
 
-    @Column(nullable = false, length = 8)
+    @Column(nullable = false, length = 10)
     private String licensePlate;
 
     @Column(nullable = false, length = 20)
@@ -48,6 +50,14 @@ public class Car {
 
     @Column(nullable = false)
     private double pricePerKm;
+
+    @Column(nullable = false)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @Column(nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     @JsonIgnore

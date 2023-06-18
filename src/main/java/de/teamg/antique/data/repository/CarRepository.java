@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
 
-    @Query(value = "SELECT * FROM CAR WHERE (lower(license_plate), lower(designation), lower(model_years), lower(hp), lower(cc), lower(fuel), lower(insurance_number), lower(tuv), lower(price_per_day), lower(price_per_km)) LIKE lower(concat('%', :filter, '%'))", nativeQuery = true)
+    @Query(value = "SELECT c FROM Car c WHERE concat(lower(c.licensePlate), lower(c.designation), c.modelYears, c.hp, c.cc, lower(c.fuel), lower(c.insuranceNumber), c.tuv, c.pricePerDay, c.pricePerKm) LIKE lower(concat('%', :filter, '%'))")
     List<Car> findAllFilterAllColumns(String filter);
 
 }

@@ -38,3 +38,8 @@ out/
 ### H2 Data ###
 *.mv.db
 *.trace.db
+
+### Vaadin ###
+vite.generated.ts
+node_modules
+frontend/generated

@@ -32,6 +32,10 @@ public class RentalService {
         return rentalRepository.findAll();
     }
 
+    public List<Rental> getAllRentalsFiltered(String filter) {
+        return rentalRepository.findAllFilterAllColumns(filter);
+    }
+
     @Cacheable(key = "#id")
     public Rental getRentalById(long id) {
         return rentalRepository.findById(id).orElseThrow(() -> new RentalNotFoundException(id));
@@ -39,7 +43,7 @@ public class RentalService {
 
     @CachePut(key = "#result.id")
     public Rental createRental(RentalDTO rentalDTO) {
-        return rentalRepository.save(new Rental(
+        return createRental(new Rental(
                 rentalDTO.rentalStart(),
                 rentalDTO.rentalEnd(),
                 rentalDTO.kmStart(),
@@ -50,6 +54,11 @@ public class RentalService {
                 personService.getPersonById(rentalDTO.customerPersonId()),
                 personService.getPersonById(rentalDTO.employeePersonId())
         ));
+    }
+
+    @CachePut(key = "#result.id")
+    public Rental createRental(Rental rental) {
+        return rentalRepository.save(rental);
     }
 
     @CachePut(key = "#result.id")
@@ -66,6 +75,10 @@ public class RentalService {
             throw new RentalNotFoundException(id);
 
         rentalRepository.deleteById(id);
+    }
+
+    public boolean rentalExistsById(long id) {
+        return rentalRepository.findById(id).isPresent();
     }
 
 }

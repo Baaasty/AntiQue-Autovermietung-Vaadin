@@ -19,6 +19,10 @@ repositories {
 	mavenCentral()
 }
 
+vaadin {
+	productionMode = true
+}
+
 extra["vaadinVersion"] = "24.1.0"
 
 dependencies {
