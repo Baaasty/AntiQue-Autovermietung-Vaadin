@@ -1,16 +1,16 @@
 package de.teamg.antique.views;
 
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.lumo.LumoUtility;
@@ -37,9 +37,13 @@ public class MainLayout extends AppLayout {
     }
 
     private void addDrawerContent() {
-        H1 appName = new H1("AntiQue-Autovermietung");
-        appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
-        Header header = new Header(appName);
+        Image appLogo = new Image(new StreamResource("logo.png", () -> getClass().getResourceAsStream("/images/logo.png")), "AntiQue Logo");
+        appLogo.addClassNames(LumoUtility.Margin.NONE, LumoUtility.Padding.NONE);
+        appLogo.setMaxWidth(3, Unit.EM);
+
+        H4 appText = new H4("Fahrzeugvermietung");
+
+        Header header = new Header(appLogo, appText);
 
         Scroller scroller = new Scroller(createNavigation());
 
@@ -58,7 +62,8 @@ public class MainLayout extends AppLayout {
 
     private void addDarkModeSwitch() {
         Checkbox themeToggle = new Checkbox("Darkmode");
-        themeToggle.addValueChangeListener(e -> setTheme(e.getValue()));
+        themeToggle.addClassNames(LumoUtility.FontSize.MEDIUM, LumoUtility.FontWeight.SEMIBOLD, LumoUtility.Margin.MEDIUM);
+        themeToggle.addValueChangeListener(event -> setTheme(event.getValue()));
 
         addToDrawer(themeToggle);
     }
