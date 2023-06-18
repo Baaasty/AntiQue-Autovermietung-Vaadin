@@ -57,13 +57,26 @@ public class CustomersView extends VerticalLayout implements BeforeEnterObserver
         closeEditor();
     }
 
-    private HorizontalLayout getContent() {
-        HorizontalLayout content = new HorizontalLayout(grid, form);
-        content.setFlexGrow(2, grid);
-        content.setFlexGrow(1, form);
-        content.addClassNames("customers-content");
-        content.setSizeFull();
-        return content;
+    private void configureGrid() {
+        grid.addClassNames("customers-grid");
+        grid.setSizeFull();
+
+        grid.removeAllColumns();
+
+        grid.addColumn(new TextRenderer<>(Person::getFirstName)).setComparator(Person::getFirstName).setHeader("Vorname");
+        grid.addColumn(new TextRenderer<>(Person::getLastName)).setComparator(Person::getLastName).setHeader("Nachname");
+        grid.addColumn(new TextRenderer<>(Person::getStreet)).setComparator(Person::getStreet).setHeader("Straße");
+        grid.addColumn(new TextRenderer<>(Person::getCity)).setComparator(Person::getCity).setHeader("Stadt");
+        grid.addColumn(new TextRenderer<>(Person::getPostCode)).setComparator(Person::getPostCode).setHeader("Postleitzahl");
+        grid.addColumn(new TextRenderer<>(Person::getCountry)).setComparator(Person::getCountry).setHeader("Land");
+        grid.addColumn(new LocalDateRenderer<>(Person::getDateOfBirth, "dd.MM.yyyy")).setComparator(Person::getDateOfBirth).setHeader("Geburtsdatum");
+        grid.addColumn(new TextRenderer<>(Person::getPhone)).setComparator(Person::getPhone).setHeader("Telefonnummer");
+        grid.addColumn(new LocalDateTimeRenderer<>(Person::getUpdatedAt, "dd.MM.yyyy HH:mm:ss")).setComparator(Person::getUpdatedAt).setHeader("Aktualisiert am");
+        grid.addColumn(new LocalDateTimeRenderer<>(Person::getCreatedAt, "dd.MM.yyyy HH:mm:ss")).setComparator(Person::getCreatedAt).setHeader("Erstellt am");
+
+        grid.getColumns().forEach(col -> col.setAutoWidth(true).setSortable(true).setResizable(true));
+
+        grid.asSingleSelect().addValueChangeListener(event -> editCustomer(event.getValue()));
     }
 
     private void configureForm() {
@@ -71,6 +84,29 @@ public class CustomersView extends VerticalLayout implements BeforeEnterObserver
         form.addSaveListener(this::saveCustomer);
         form.addDeleteListener(this::deleteCustomer);
         form.addCloseListener(e -> closeEditor());
+    }
+
+    private Component getToolbar() {
+        filterText.setPlaceholder("Suche");
+        filterText.setClearButtonVisible(true);
+        filterText.setValueChangeMode(ValueChangeMode.LAZY);
+        filterText.addValueChangeListener(event -> updateList());
+
+        Button addCustomerButton = new Button("Kunde hinzufügen");
+        addCustomerButton.addClickListener(click -> UI.getCurrent().navigate(CUSTOMER_NEW_ROUTE_TEMPLATE));
+
+        var toolbar = new HorizontalLayout(filterText, addCustomerButton);
+        toolbar.addClassName("toolbar");
+        return toolbar;
+    }
+
+    private HorizontalLayout getContent() {
+        HorizontalLayout content = new HorizontalLayout(grid, form);
+        content.setFlexGrow(2, grid);
+        content.setFlexGrow(1, form);
+        content.addClassNames("customers-content");
+        content.setSizeFull();
+        return content;
     }
 
     private void saveCustomer(CustomersForm.SaveEvent event) {
@@ -94,45 +130,11 @@ public class CustomersView extends VerticalLayout implements BeforeEnterObserver
         closeEditor();
     }
 
-    private void configureGrid() {
-        grid.addClassNames("contact-grid");
-        grid.setSizeFull();
-
-        grid.removeAllColumns();
-
-        grid.addColumn(new TextRenderer<>(Person::getFirstName)).setComparator(Person::getFirstName).setHeader("Vorname");
-        grid.addColumn(new TextRenderer<>(Person::getLastName)).setComparator(Person::getLastName).setHeader("Nachname");
-        grid.addColumn(new TextRenderer<>(Person::getStreet)).setComparator(Person::getStreet).setHeader("Straße");
-        grid.addColumn(new TextRenderer<>(Person::getCity)).setComparator(Person::getCity).setHeader("Stadt");
-        grid.addColumn(new TextRenderer<>(Person::getPostCode)).setComparator(Person::getPostCode).setHeader("Postleitzahl");
-        grid.addColumn(new TextRenderer<>(Person::getCountry)).setComparator(Person::getCountry).setHeader("Land");
-        grid.addColumn(new LocalDateRenderer<>(Person::getDateOfBirth, "dd.MM.yyyy")).setComparator(Person::getDateOfBirth).setHeader("Geburtsdatum");
-        grid.addColumn(new TextRenderer<>(Person::getPhone)).setComparator(Person::getPhone).setHeader("Telefonnummer");
-        grid.addColumn(new LocalDateTimeRenderer<>(Person::getUpdatedAt, "dd.MM.yyyy HH:mm:ss:SSS")).setComparator(Person::getUpdatedAt).setHeader("Aktualisiert am");
-        grid.addColumn(new LocalDateTimeRenderer<>(Person::getCreatedAt, "dd.MM.yyyy HH:mm:ss:SSS")).setComparator(Person::getCreatedAt).setHeader("Erstellt am");
-
-        grid.getColumns().forEach(col -> col.setAutoWidth(true).setSortable(true).setResizable(true));
-
-        grid.asSingleSelect().addValueChangeListener(event -> editCustomer(event.getValue()));
-    }
-
-    private Component getToolbar() {
-        filterText.setPlaceholder("Suche");
-        filterText.setClearButtonVisible(true);
-        filterText.setValueChangeMode(ValueChangeMode.LAZY);
-        filterText.addValueChangeListener(event -> updateList());
-
-        Button addCustomerButton = new Button("Kunde hinzufügen");
-        addCustomerButton.addClickListener(click -> UI.getCurrent().navigate(CUSTOMER_NEW_ROUTE_TEMPLATE));
-
-        var toolbar = new HorizontalLayout(filterText, addCustomerButton);
-        toolbar.addClassName("toolbar");
-        return toolbar;
-    }
-
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         Optional<String> optRouteParameter = event.getRouteParameters().get(CUSTOMER_ID);
+
+        filterText.setValue("");
 
         if (optRouteParameter.isEmpty()) {
             updateList();

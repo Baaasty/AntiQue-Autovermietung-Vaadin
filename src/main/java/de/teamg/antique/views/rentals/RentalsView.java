@@ -9,6 +9,10 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.LocalDateRenderer;
+import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
+import com.vaadin.flow.data.renderer.NumberRenderer;
+import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -21,6 +25,8 @@ import de.teamg.antique.data.exception.RentalNotFoundException;
 import de.teamg.antique.data.service.RentalService;
 import de.teamg.antique.views.MainLayout;
 
+import java.text.NumberFormat;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @SpringComponent
@@ -90,18 +96,32 @@ public class RentalsView extends VerticalLayout implements BeforeEnterObserver {
         grid.addClassNames("contact-grid");
         grid.setSizeFull();
 
-        grid.setColumns("rentalStart", "rentalEnd", "kmStart", "kmEnd", "pricePerDay", "pricePerKm", "updatedAt", "createdAt");
+        grid.removeAllColumns();
 
-        grid.getColumnByKey("rentalStart").setHeader("Mietbeginn");
-        grid.getColumnByKey("rentalEnd").setHeader("Mietende");
-        grid.getColumnByKey("kmStart").setHeader("Kilometerstand zu Beginn");
-        grid.getColumnByKey("kmEnd").setHeader("Kilometerstand zu Ende");
-        grid.getColumnByKey("pricePerDay").setHeader("€/Tag");
-        grid.getColumnByKey("pricePerKm").setHeader("€/Tag");
-        grid.getColumnByKey("updatedAt").setHeader("Aktualisiert am");
-        grid.getColumnByKey("createdAt").setHeader("Erstellt am");
+        grid.addColumn(new TextRenderer<>(rental -> rental.getCar().getDesignation())).setComparator(rental -> rental.getCar().getDesignation()).setHeader("Auto");
+        grid.addColumn(new TextRenderer<>(rental -> rental.getCustomerPerson().getFirstName() + " " + rental.getCustomerPerson().getLastName())).setComparator(rental -> rental.getCustomerPerson().getFirstName() + " " + rental.getCustomerPerson().getLastName()).setHeader("Kunde");
+        grid.addColumn(new TextRenderer<>(rental -> rental.getEmployeePerson().getFirstName() + " " + rental.getEmployeePerson().getLastName())).setComparator(rental -> rental.getEmployeePerson().getFirstName() + " " + rental.getEmployeePerson().getLastName()).setHeader("Mitarbeiter");
+        grid.addColumn(new LocalDateRenderer<>(Rental::getRentalStart, "dd.MM.yyyy")).setComparator(Rental::getRentalStart).setHeader("Mietbeginn");
+        grid.addColumn(new LocalDateRenderer<>(Rental::getRentalEnd, "dd.MM.yyyy")).setComparator(Rental::getRentalEnd).setHeader("Mietende");
+        grid.addColumn(new NumberRenderer<>(Rental::getKmStart, NumberFormat.getIntegerInstance())).setComparator(Rental::getKmStart).setHeader("Kilometerstand zu Beginn");
+        grid.addColumn(new NumberRenderer<>(Rental::getKmEnd, NumberFormat.getIntegerInstance())).setComparator(Rental::getKmEnd).setHeader("Kilometerstand zu Ende");
+        grid.addColumn(new NumberRenderer<>(Rental::getPricePerDay, NumberFormat.getCurrencyInstance())).setComparator(Rental::getPricePerDay).setHeader("€/Tag");
+        grid.addColumn(new NumberRenderer<>(Rental::getPricePerKm, NumberFormat.getCurrencyInstance())).setComparator(Rental::getPricePerKm).setHeader("€/Km");
+        grid.addColumn(new NumberRenderer<>(rental -> {
+            long dayss = ChronoUnit.DAYS.between(rental.getRentalStart(), rental.getRentalEnd());
+            long kmss = rental.getKmEnd() - rental.getKmStart();
+            double ppd = rental.getPricePerDay();
+            double ppk = rental.getPricePerKm();
 
-        grid.getColumns().forEach(col -> col.setAutoWidth(true));
+            double s = dayss * ppd + kmss * ppk;
+            double mw = s * 0.19;
+
+            return s + mw;
+        }, NumberFormat.getCurrencyInstance())).setComparator(Rental::getPricePerKm).setHeader("Gesamtsumme");
+        grid.addColumn(new LocalDateTimeRenderer<>(Rental::getUpdatedAt, "dd.MM.yyyy HH:mm:ss")).setComparator(Rental::getUpdatedAt).setHeader("Aktualisiert am");
+        grid.addColumn(new LocalDateTimeRenderer<>(Rental::getCreatedAt, "dd.MM.yyyy HH:mm:ss")).setComparator(Rental::getCreatedAt).setHeader("Erstellt am");
+
+        grid.getColumns().forEach(col -> col.setAutoWidth(true).setSortable(true).setResizable(true));
 
         grid.asSingleSelect().addValueChangeListener(event -> editRental(event.getValue()));
     }

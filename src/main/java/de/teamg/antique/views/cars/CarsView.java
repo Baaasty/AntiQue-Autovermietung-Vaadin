@@ -54,10 +54,12 @@ public class CarsView extends VerticalLayout implements BeforeEnterObserver {
         configureForm();
 
         add(getToolbar(), getContent());
+        updateList();
+        closeEditor();
     }
 
     private void configureGrid() {
-        grid.addClassNames("contact-grid");
+        grid.addClassNames("cars-grid");
         grid.setSizeFull();
 
         grid.removeAllColumns();
@@ -72,8 +74,8 @@ public class CarsView extends VerticalLayout implements BeforeEnterObserver {
         grid.addColumn(new LocalDateRenderer<>(Car::getTuv, "dd.MM.yyyy")).setComparator(Car::getTuv).setHeader("TÜV");
         grid.addColumn(new NumberRenderer<>(Car::getPricePerDay, NumberFormat.getCurrencyInstance())).setComparator(Car::getPricePerDay).setHeader("€/Tag");
         grid.addColumn(new NumberRenderer<>(Car::getPricePerKm, NumberFormat.getCurrencyInstance())).setComparator(Car::getPricePerKm).setHeader("€/Km");
-        grid.addColumn(new LocalDateTimeRenderer<>(Car::getUpdatedAt, "dd.MM.yyyy HH:mm:ss:SSS")).setComparator(Car::getUpdatedAt).setHeader("Aktualisiert am");
-        grid.addColumn(new LocalDateTimeRenderer<>(Car::getCreatedAt, "dd.MM.yyyy HH:mm:ss:SSS")).setComparator(Car::getCreatedAt).setHeader("Erstellt am");
+        grid.addColumn(new LocalDateTimeRenderer<>(Car::getUpdatedAt, "dd.MM.yyyy HH:mm:ss")).setComparator(Car::getUpdatedAt).setHeader("Aktualisiert am");
+        grid.addColumn(new LocalDateTimeRenderer<>(Car::getCreatedAt, "dd.MM.yyyy HH:mm:ss")).setComparator(Car::getCreatedAt).setHeader("Erstellt am");
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true).setSortable(true).setResizable(true));
 
@@ -130,6 +132,8 @@ public class CarsView extends VerticalLayout implements BeforeEnterObserver {
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         Optional<String> optRouteParameter = event.getRouteParameters().get(CAR_ID);
+
+        filterText.setValue("");
 
         if (optRouteParameter.isEmpty()) {
             updateList();

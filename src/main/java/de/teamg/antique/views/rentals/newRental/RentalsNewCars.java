@@ -7,6 +7,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.LocalDateRenderer;
+import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.data.renderer.NumberRenderer;
 import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -50,7 +51,7 @@ public class RentalsNewCars extends VerticalLayout implements BeforeEnterObserve
 
     private void configureGrid() {
 
-        grid.addClassNames("contact-grid");
+        grid.addClassNames("rentals-new-grid");
         grid.setSizeFull();
 
         grid.removeAllColumns();
@@ -64,6 +65,8 @@ public class RentalsNewCars extends VerticalLayout implements BeforeEnterObserve
         grid.addColumn(new LocalDateRenderer<>(Car::getTuv, "dd.MM.yyyy")).setComparator(Car::getTuv).setHeader("TÜV");
         grid.addColumn(new NumberRenderer<>(Car::getPricePerDay, NumberFormat.getCurrencyInstance())).setComparator(Car::getPricePerDay).setHeader("€/Tag");
         grid.addColumn(new NumberRenderer<>(Car::getPricePerKm, NumberFormat.getCurrencyInstance())).setComparator(Car::getPricePerKm).setHeader("€/Km");
+        grid.addColumn(new LocalDateTimeRenderer<>(Car::getUpdatedAt, "dd.MM.yyyy HH:mm:ss")).setComparator(Car::getUpdatedAt).setHeader("Aktualisiert am");
+        grid.addColumn(new LocalDateTimeRenderer<>(Car::getCreatedAt, "dd.MM.yyyy HH:mm:ss")).setComparator(Car::getCreatedAt).setHeader("Erstellt am");
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true).setSortable(true).setResizable(true));
         grid.addItemClickListener(event -> selectCar(event.getItem()));
@@ -83,6 +86,7 @@ public class RentalsNewCars extends VerticalLayout implements BeforeEnterObserve
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
+        filterText.setValue("");
         updateList();
     }
 

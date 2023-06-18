@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,10 +23,10 @@ public class Rental {
     private long id;
 
     @Column(nullable = false)
-    private LocalDateTime rentalStart;
+    private LocalDate rentalStart;
 
     @Column
-    private LocalDateTime rentalEnd;
+    private LocalDate rentalEnd;
 
     @Column(nullable = false)
     private int kmStart;
@@ -47,21 +48,21 @@ public class Rental {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "car_id", referencedColumnName = "id", nullable = false)
     private Car car;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
     private Person customerPerson;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id", nullable = false)
     private Person employeePerson;
 
     public Rental(
-            LocalDateTime rentalStart,
-            LocalDateTime rentalEnd,
+            LocalDate rentalStart,
+            LocalDate rentalEnd,
             int kmStart,
             int kmEnd,
             double pricePerDay,

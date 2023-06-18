@@ -13,7 +13,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import de.teamg.antique.data.entity.Person;
@@ -73,7 +72,7 @@ public class EmployeesForm extends FormLayout {
         delete.addClickListener(event -> fireEvent(new DeleteEvent(this, binder.getBean())));
         close.addClickListener(event -> fireEvent(new CloseEvent(this)));
 
-        binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
+        binder.addStatusChangeListener(event -> save.setEnabled(binder.isValid()));
         return new HorizontalLayout(save, delete, close);
     }
 
@@ -120,16 +119,16 @@ public class EmployeesForm extends FormLayout {
         }
     }
 
-    public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
-        return addListener(DeleteEvent.class, listener);
+    public void addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
+        addListener(DeleteEvent.class, listener);
     }
 
-    public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
-        return addListener(SaveEvent.class, listener);
+    public void addSaveListener(ComponentEventListener<SaveEvent> listener) {
+        addListener(SaveEvent.class, listener);
     }
 
-    public Registration addCloseListener(ComponentEventListener<CloseEvent> listener) {
-        return addListener(CloseEvent.class, listener);
+    public void addCloseListener(ComponentEventListener<CloseEvent> listener) {
+        addListener(CloseEvent.class, listener);
     }
 
 }

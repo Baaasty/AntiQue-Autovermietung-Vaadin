@@ -1,11 +1,11 @@
 package de.teamg.antique.data.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record RentalDTO(
         long id,
-        LocalDateTime rentalStart,
-        LocalDateTime rentalEnd,
+        LocalDate rentalStart,
+        LocalDate rentalEnd,
         int kmStart,
         int kmEnd,
         double pricePerDay,

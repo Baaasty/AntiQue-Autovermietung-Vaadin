@@ -48,7 +48,7 @@ public class RentalsNewCustomers extends VerticalLayout implements BeforeEnterOb
     }
 
     private void configureGrid() {
-        grid.addClassNames("contact-grid");
+        grid.addClassNames("rentals-new-grid");
         grid.setSizeFull();
 
         grid.removeAllColumns();
@@ -61,8 +61,8 @@ public class RentalsNewCustomers extends VerticalLayout implements BeforeEnterOb
         grid.addColumn(new TextRenderer<>(Person::getCountry)).setComparator(Person::getCountry).setHeader("Land");
         grid.addColumn(new LocalDateRenderer<>(Person::getDateOfBirth, "dd.MM.yyyy")).setComparator(Person::getDateOfBirth).setHeader("Geburtsdatum");
         grid.addColumn(new TextRenderer<>(Person::getPhone)).setComparator(Person::getPhone).setHeader("Telefonnummer");
-        grid.addColumn(new LocalDateTimeRenderer<>(Person::getUpdatedAt, "dd.MM.yyyy HH:mm:ss:SSS")).setComparator(Person::getUpdatedAt).setHeader("Aktualisiert am");
-        grid.addColumn(new LocalDateTimeRenderer<>(Person::getCreatedAt, "dd.MM.yyyy HH:mm:ss:SSS")).setComparator(Person::getCreatedAt).setHeader("Erstellt am");
+        grid.addColumn(new LocalDateTimeRenderer<>(Person::getUpdatedAt, "dd.MM.yyyy HH:mm:ss")).setComparator(Person::getUpdatedAt).setHeader("Aktualisiert am");
+        grid.addColumn(new LocalDateTimeRenderer<>(Person::getCreatedAt, "dd.MM.yyyy HH:mm:ss")).setComparator(Person::getCreatedAt).setHeader("Erstellt am");
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true).setSortable(true).setResizable(true));
         grid.addItemClickListener(event -> selectPerson(event.getItem()));
@@ -81,6 +81,7 @@ public class RentalsNewCustomers extends VerticalLayout implements BeforeEnterOb
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
+        filterText.setValue("");
         updateList();
     }
 
