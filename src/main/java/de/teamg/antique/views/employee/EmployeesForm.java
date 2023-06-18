@@ -23,18 +23,10 @@ import lombok.Getter;
 @SpringComponent
 @UIScope
 public class EmployeesForm extends FormLayout {
-    TextField firstName = new TextField("Vorname");
-    TextField lastName = new TextField("Nachname");
-    TextField street = new TextField("Straße");
-    TextField city = new TextField("Stadt");
-    TextField postCode = new TextField("Postleitzahl");
-    TextField country = new TextField("Land");
-    DatePicker dateOfBirth = new DatePicker("Geburtsdatum");
-    TextField phone = new TextField("Telefonnummer");
-    
-    Button save = new Button("Speichern");
-    Button delete = new Button("Löschen");
-    Button close = new Button("Abbrechen");
+
+    private final Button save = new Button("Speichern");
+    private final Button delete = new Button("Löschen");
+    private final Button close = new Button("Abbrechen");
 
     PersonService personService;
 
@@ -45,6 +37,15 @@ public class EmployeesForm extends FormLayout {
 
         addClassName("employee-form");
 
+        TextField firstName = new TextField("Vorname");
+        TextField lastName = new TextField("Nachname");
+        TextField street = new TextField("Straße");
+        TextField city = new TextField("Stadt");
+        TextField postCode = new TextField("Postleitzahl");
+        TextField country = new TextField("Land");
+        DatePicker dateOfBirth = new DatePicker("Geburtsdatum");
+        TextField phone = new TextField("Telefonnummer");
+
         binder.forField(firstName).asRequired().bind("firstName");
         binder.forField(lastName).asRequired().bind("lastName");
         binder.forField(street).asRequired().bind("street");
@@ -53,20 +54,10 @@ public class EmployeesForm extends FormLayout {
         binder.forField(country).asRequired().bind("country");
         binder.forField(dateOfBirth).asRequired().bind("dateOfBirth");
         binder.forField(phone).asRequired().bind("phone");
-        
+
         binder.bindInstanceFields(this);
 
-        add(
-                firstName,
-                lastName,
-                street,
-                city,
-                postCode,
-                country,
-                dateOfBirth,
-                phone,
-                createButtonsLayout()
-        );
+        add(firstName, lastName, street, city, postCode, country, dateOfBirth, phone, createButtonsLayout());
 
     }
 
@@ -96,8 +87,7 @@ public class EmployeesForm extends FormLayout {
     public void setEmployee(Person employee) {
         binder.setBean(employee);
 
-        if (employee != null)
-            delete.setVisible(personService.employeeExistsById(employee.getId()));
+        if (employee != null) delete.setVisible(personService.employeeExistsById(employee.getId()));
     }
 
     @Getter

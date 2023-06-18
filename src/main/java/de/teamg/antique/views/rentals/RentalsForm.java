@@ -24,6 +24,7 @@ import lombok.Getter;
 @SpringComponent
 @UIScope
 public class RentalsForm extends FormLayout {
+
     DatePicker rentalStart = new DatePicker("Mietbeginn");
     DatePicker rentalEnd = new DatePicker("Mietende");
     IntegerField kmStart = new IntegerField("Kilometerstand zu Beginn");
@@ -53,15 +54,7 @@ public class RentalsForm extends FormLayout {
 
         binder.bindInstanceFields(this);
 
-        add(
-                rentalStart,
-                rentalEnd,
-                kmStart,
-                kmEnd,
-                pricePerDay,
-                pricePerKm,
-                createButtonsLayout()
-        );
+        add(rentalStart, rentalEnd, kmStart, kmEnd, pricePerDay, pricePerKm, createButtonsLayout());
 
     }
 

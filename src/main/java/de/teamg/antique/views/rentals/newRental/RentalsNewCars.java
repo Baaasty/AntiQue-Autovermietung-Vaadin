@@ -7,11 +7,12 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.LocalDateRenderer;
-import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.data.renderer.NumberRenderer;
 import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import de.teamg.antique.data.entity.Car;
@@ -21,18 +22,16 @@ import de.teamg.antique.data.service.PersonService;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @SpringComponent
 @UIScope
-public class RentalsNewCars extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {
+public class RentalsNewCars extends VerticalLayout implements BeforeEnterObserver {
 
     private final String RENTAL_NEW_ROUTE_TEMPLATE = "rentals/new";
 
     private final Grid<Car> grid = new Grid<>(Car.class);
     private final TextField filterText = new TextField();
-    private Map<String, List<String>> parametersMap = new HashMap<>();
 
     private final CarService carService;
     private final PersonService personService;
@@ -50,6 +49,7 @@ public class RentalsNewCars extends VerticalLayout implements BeforeEnterObserve
     }
 
     private void configureGrid() {
+
         grid.addClassNames("contact-grid");
         grid.setSizeFull();
 
@@ -61,12 +61,9 @@ public class RentalsNewCars extends VerticalLayout implements BeforeEnterObserve
         grid.addColumn(new NumberRenderer<>(Car::getHp, NumberFormat.getIntegerInstance())).setComparator(Car::getHp).setHeader("PS");
         grid.addColumn(new NumberRenderer<>(Car::getCc, NumberFormat.getIntegerInstance())).setComparator(Car::getCc).setHeader("ccm");
         grid.addColumn(new TextRenderer<>(Car::getFuel)).setComparator(Car::getFuel).setHeader("Treibstoff");
-        grid.addColumn(new TextRenderer<>(Car::getInsuranceNumber)).setComparator(Car::getInsuranceNumber).setHeader("Versicherungsnummer");
         grid.addColumn(new LocalDateRenderer<>(Car::getTuv, "dd.MM.yyyy")).setComparator(Car::getTuv).setHeader("TÜV");
         grid.addColumn(new NumberRenderer<>(Car::getPricePerDay, NumberFormat.getCurrencyInstance())).setComparator(Car::getPricePerDay).setHeader("€/Tag");
         grid.addColumn(new NumberRenderer<>(Car::getPricePerKm, NumberFormat.getCurrencyInstance())).setComparator(Car::getPricePerKm).setHeader("€/Km");
-        grid.addColumn(new LocalDateTimeRenderer<>(Car::getUpdatedAt, "dd.MM.yyyy HH:mm:ss:SSS")).setComparator(Car::getUpdatedAt).setHeader("Aktualisiert am");
-        grid.addColumn(new LocalDateTimeRenderer<>(Car::getCreatedAt, "dd.MM.yyyy HH:mm:ss:SSS")).setComparator(Car::getCreatedAt).setHeader("Erstellt am");
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true).setSortable(true).setResizable(true));
         grid.addItemClickListener(event -> selectCar(event.getItem()));
@@ -87,16 +84,6 @@ public class RentalsNewCars extends VerticalLayout implements BeforeEnterObserve
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         updateList();
-    }
-
-    @Override
-    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
-        Location location = event.getLocation();
-        QueryParameters queryParameters = location.getQueryParameters();
-
-        parametersMap = queryParameters.getParameters();
-
-        System.out.println("lol: " + queryParameters.getParameters());
     }
 
     private void updateList() {

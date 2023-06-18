@@ -151,8 +151,7 @@ public class EmployeesView extends VerticalLayout implements BeforeEnterObserver
 
             editEmployee(personService.getPersonById(employeeId));
         } catch (NumberFormatException | PersonNotFoundException exception) {
-            Notification.show(String.format("Es gibt keinen Mitarbeiter mit der ID '%s'", routeParameter), 3000, Notification.Position.BOTTOM_START)
-                    .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            Notification.show(String.format("Es gibt keinen Mitarbeiter mit der ID '%s'", routeParameter), 3000, Notification.Position.BOTTOM_START).addThemeVariants(NotificationVariant.LUMO_ERROR);
             grid.select(null);
             grid.getDataProvider().refreshAll();
             event.forwardTo(EMPLOYEE_LIST_ROUTE_TEMPLATE);

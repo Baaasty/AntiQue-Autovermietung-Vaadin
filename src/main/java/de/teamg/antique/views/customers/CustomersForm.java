@@ -23,15 +23,7 @@ import lombok.Getter;
 @SpringComponent
 @UIScope
 public class CustomersForm extends FormLayout {
-    TextField firstName = new TextField("Vorname");
-    TextField lastName = new TextField("Nachname");
-    TextField street = new TextField("Straße");
-    TextField city = new TextField("Stadt");
-    TextField postCode = new TextField("Postleitzahl");
-    TextField country = new TextField("Land");
-    DatePicker dateOfBirth = new DatePicker("Geburtsdatum");
-    TextField phone = new TextField("Telefonnummer");
-    
+
     Button save = new Button("Speichern");
     Button delete = new Button("Löschen");
     Button close = new Button("Abbrechen");
@@ -45,6 +37,15 @@ public class CustomersForm extends FormLayout {
 
         addClassName("customer-form");
 
+        TextField firstName = new TextField("Vorname");
+        TextField lastName = new TextField("Nachname");
+        TextField street = new TextField("Straße");
+        TextField city = new TextField("Stadt");
+        TextField postCode = new TextField("Postleitzahl");
+        TextField country = new TextField("Land");
+        DatePicker dateOfBirth = new DatePicker("Geburtsdatum");
+        TextField phone = new TextField("Telefonnummer");
+
         binder.forField(firstName).asRequired().bind("firstName");
         binder.forField(lastName).asRequired().bind("lastName");
         binder.forField(street).asRequired().bind("street");
@@ -53,7 +54,7 @@ public class CustomersForm extends FormLayout {
         binder.forField(country).asRequired().bind("country");
         binder.forField(dateOfBirth).asRequired().bind("dateOfBirth");
         binder.forField(phone).asRequired().bind("phone");
-        
+
         binder.bindInstanceFields(this);
 
         add(

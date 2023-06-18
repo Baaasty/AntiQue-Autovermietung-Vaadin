@@ -62,8 +62,7 @@ public class RentalsNewView extends VerticalLayout implements HasUrlParameter<St
             add(rentalsNewCars);
         }
 
-        if (parametersMap.containsKey("car"))
-            remove(rentalsNewCars);
+        if (parametersMap.containsKey("car")) remove(rentalsNewCars);
     }
 
 }

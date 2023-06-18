@@ -10,7 +10,9 @@ import com.vaadin.flow.data.renderer.LocalDateRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import de.teamg.antique.data.entity.Person;
@@ -19,18 +21,16 @@ import de.teamg.antique.data.service.CarService;
 import de.teamg.antique.data.service.PersonService;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @SpringComponent
 @UIScope
-public class RentalsNewCustomers extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {
+public class RentalsNewCustomers extends VerticalLayout implements BeforeEnterObserver {
 
     private final String RENTAL_NEW_ROUTE_TEMPLATE = "rentals/new";
 
     private final Grid<Person> grid = new Grid<>(Person.class);
     private final TextField filterText = new TextField();
-    private Map<String, List<String>> parametersMap = new HashMap<>();
 
     private final PersonService personService;
     private final CarService carService;
@@ -66,7 +66,6 @@ public class RentalsNewCustomers extends VerticalLayout implements BeforeEnterOb
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true).setSortable(true).setResizable(true));
         grid.addItemClickListener(event -> selectPerson(event.getItem()));
-
     }
 
     private Component getToolbar() {
@@ -83,14 +82,6 @@ public class RentalsNewCustomers extends VerticalLayout implements BeforeEnterOb
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         updateList();
-    }
-
-    @Override
-    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
-        Location location = event.getLocation();
-        QueryParameters queryParameters = location.getQueryParameters();
-
-        parametersMap = queryParameters.getParameters();
     }
 
     private void updateList() {

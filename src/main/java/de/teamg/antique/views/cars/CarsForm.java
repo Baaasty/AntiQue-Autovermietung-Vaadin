@@ -25,16 +25,6 @@ import lombok.Getter;
 @SpringComponent
 @UIScope
 public class CarsForm extends FormLayout {
-    TextField licensePlate = new TextField("Kennzeichen");
-    TextField designation = new TextField("Fahrzeugbezeichnung");
-    IntegerField modelYears = new IntegerField("Baujahr");
-    IntegerField hp = new IntegerField("PS");
-    IntegerField cc = new IntegerField("ccm");
-    TextField fuel = new TextField("Treibstoff");
-    TextField insuranceNumber = new TextField("Versicherungsnummer");
-    DatePicker tuv = new DatePicker("TÜV");
-    NumberField pricePerDay = new NumberField("€/Tag");
-    NumberField pricePerKm = new NumberField("€/Km");
 
     Button save = new Button("Speichern");
     Button delete = new Button("Löschen");
@@ -48,6 +38,17 @@ public class CarsForm extends FormLayout {
         this.carService = carService;
 
         addClassName("car-form");
+
+        TextField licensePlate = new TextField("Kennzeichen");
+        TextField designation = new TextField("Fahrzeugbezeichnung");
+        IntegerField modelYears = new IntegerField("Baujahr");
+        IntegerField hp = new IntegerField("PS");
+        IntegerField cc = new IntegerField("ccm");
+        TextField fuel = new TextField("Treibstoff");
+        TextField insuranceNumber = new TextField("Versicherungsnummer");
+        DatePicker tuv = new DatePicker("TÜV");
+        NumberField pricePerDay = new NumberField("€/Tag");
+        NumberField pricePerKm = new NumberField("€/Km");
 
         binder.forField(licensePlate).asRequired().bind("licensePlate");
         binder.forField(designation).asRequired().bind("designation");
