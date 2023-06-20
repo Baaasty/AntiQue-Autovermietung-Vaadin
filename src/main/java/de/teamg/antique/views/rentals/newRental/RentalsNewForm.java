@@ -1,6 +1,5 @@
 package de.teamg.antique.views.rentals.newRental;
 
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -24,15 +23,17 @@ import de.teamg.antique.data.service.RentalService;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.text.DecimalFormat;
 import java.time.temporal.ChronoUnit;
 
+@Getter
 @SpringComponent
 @UIScope
 public class RentalsNewForm extends VerticalLayout {
 
     @Setter
-    @Getter
     private static H2 car = new H2("Auto: ");
+
     private final DatePicker rentalStart = new DatePicker("Mietbeginn");
     private final DatePicker rentalEnd = new DatePicker("Mietende");
     private final IntegerField kmStart = new IntegerField("Kilometerstand zu Beginn");
@@ -163,13 +164,15 @@ public class RentalsNewForm extends VerticalLayout {
             double mw = s * 0.19;
             double sOMG = s + mw;
 
+            DecimalFormat format = new DecimalFormat("#,##0.00");
+
             daysValue.setText(String.valueOf(dayss));
             kmsValue.setText(String.valueOf(kmss));
-            pricePerDayValue.setText(ppd + "€");
-            pricePerKmValue.setText(ppk + "€");
-            sumValue.setText(s + "€");
-            mwstValue.setText(mw + "€");
-            sumOMGValue.setText(sOMG + "€");
+            pricePerDayValue.setText(format.format(ppd) + " €");
+            pricePerKmValue.setText(format.format(ppk) + " €");
+            sumValue.setText(format.format(s) + " €");
+            mwstValue.setText(format.format(mw) + " €");
+            sumOMGValue.setText(format.format(sOMG) + " €");
         } catch (Exception ignored) {
 
         }
